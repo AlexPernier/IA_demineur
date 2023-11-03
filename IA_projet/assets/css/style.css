@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
+
+:root {
+    --background: rgb(0, 18, 44);
+    --grey: rgb(101, 110, 126);
+    --green: rgb(62, 206, 86);
+    --blue: rgb(83, 39, 240);
+    --purple: rgb(158, 0, 163);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--background);
+    font-family: 'Ubuntu', sans-serif;
+    color: white;
+}
+
+.verticalement_et_horizontalement_centre {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.choix_niveau {
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+}
+
+.choix_niveau_boutons {
+    display: flex;
+    flex-direction: row;
+    gap: 1vw;
+}
+
+.bouton_niveau:hover label{
+    background-color: var(--blue) !important;
+    transition: 300ms;
+}
+
+.bouton_niveau input[type="radio"] {
+    display: none;
+}
+
+.bouton_niveau label {
+    display: block;
+    padding: 2vw;
+    border-radius: .5vw;
+    background-color: var(--grey);
+    cursor: pointer;
+}
+
+.bouton_niveau input[type="radio"]:checked + label{
+    background-color: var(--green);
+}
+
+.bouton_jouer {
+    all: unset;
+    margin-top: 1vw;
+    width: 100%;
+    padding: 2vw 0;
+    border-radius: 2.5vw;
+    background-color: var(--purple);
+    text-align: center;
+    cursor: pointer;
+}
+
+.grille {
+    margin: 0 auto;
+}
+
+.case {
+    width: min(4.5vw, 4.5vh);
+    height: min(4.5vw, 4.5vh);
+    background-color: var(--grey);
+    text-align: center;
+    font-weight: bold;
+}
+
+.case_cliquee {
+    background-color: var(--green);
+}
+
+.case_drapeau {
+    background-color: var(--blue);
+}
+
+.bouton_ia {
+    all: unset;
+    position: absolute;
+    top: min(3vw, 3vh);
+    left: 25vw;
+    width: 50vw;
+    height: 5vh;
+    background-color: var(--purple);
+    text-align: center;
+    border-radius: 2.5vh;
+    cursor: pointer;
+}
+
+.statistiques {
+    position: absolute;
+    left: min(1vw, 1vh);
+    bottom: min(1vw, 1vh);
+    font-size: large;
+}
