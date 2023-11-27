@@ -1,0 +1,4 @@
+Implémentation d'un algo naif (ne place pas de drapeau)
+    clique sur la case ayant la somme d'information voisine le plus faible.
+    amélioration à faire ; calculer des informations à partir de voisins élargi
+    et prise en compte des drapeaux
