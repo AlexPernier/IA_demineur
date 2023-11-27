@@ -12,7 +12,6 @@
     <script src="./assets/js/script.js"></script>
 </head>
 <body>
-    <button class="bouton_ia" onclick="ia()">Coup IA</button>
     <div class="statistiques">
         <span>Nombre de mines :</span>
         <span id="nombre_mines"></span>
@@ -22,9 +21,10 @@
         <br>
         <span>Nombre de cases non minées restantes :</span>
         <span id="nombre_cases_non_minees_restantes"></span>
+        <button class="bouton_ia" onclick="ia1(0)">Coup IA</button>
     </div>
     <div class="verticalement_et_horizontalement_centre">
-        <table class="grille" id="grille" oncontextmenu="return false;"></table>
+        <table class="grille" id="grille" onclick="explorer()" oncontextmenu="return false;"></table>
     </div>
 </body>
 </html>

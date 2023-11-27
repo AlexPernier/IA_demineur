@@ -15,21 +15,21 @@ function choix_difficulte()
 
     if (difficulte === "expert")
     {
-        nb_mines = 20;
-        largeur = 15;
-        hauteur = 15;
+        nb_mines = 99;
+        largeur = 18;
+        hauteur = 18;
     }
     else if (difficulte === "intermediaire")
     {
-        nb_mines = 10;
-        largeur = 10;
-        hauteur = 10;
+        nb_mines = 40;
+        largeur = 16;
+        hauteur = 16;
     }
     else
     {
-        nb_mines = 5;
-        largeur = 10;
-        hauteur = 10;
+        nb_mines = 10;
+        largeur = 9;
+        hauteur = 9;
     }
 }
 
@@ -78,8 +78,12 @@ function dispose_mines()
     {
         let x = Math.floor(Math.random() * largeur);
         let y = Math.floor(Math.random() * hauteur);
-        
-        matrice_mines[x][y] = 1;
+
+        if (matrice_mines[x][y] === 1){
+            i--;
+        }else {
+            matrice_mines[x][y] = 1;
+        }
     }
 }
 
@@ -95,18 +99,12 @@ function compte_voisins()
                 {
                     if (x + i >= 0 && x + i < largeur && y + j >= 0 && y + j < hauteur)
                     {
-                        if (
-                            x + i >= 0
-                            && x + i < largeur
-                            && y + j >= 0
-                            && y + j < hauteur
-                        )
-                        {
                             matrice_nombre_voisins[x][y] += matrice_mines[x + i][y + j];
-                        }
+
                     }
                 }
             }
+            console.log(matrice_nombre_voisins[x][y]);
         }
     }
 }
@@ -140,7 +138,10 @@ function clic_case(x, y, type_clique)
 
                 if (matrice_mines[x][y] === 1)
                 {
-                    partie_perdue();
+                    let element = "case_"+x+"_"+y;
+                    document.getElementById(element).setAttribute("class","perdue");
+                    //partie_perdue();
+                    return false;
                 }
                 else if (nombre_cases_non_minees_restantes() === 0)
                 {
@@ -229,7 +230,8 @@ function nombre_drapeaux_places()
 
 /// IA ///
 
-function ia()
+
+function explorer()
 {
     let case_decouverte = false;
 
@@ -262,9 +264,9 @@ function ia()
         }
     }
 
-    if (case_decouverte === false)
+    if (case_decouverte === true)
     {
-        alert("Aucune case à proximité d’une case découverte dont le nombre de mines voisines est égal à 0 !");
+        explorer();
     }
 }
 
@@ -296,6 +298,7 @@ function affiche_matrices()
                 case_.setAttribute("class", "case case_cliquee");
                 
                 case_.innerHTML = matrice_nombre_voisins[x][y];
+
             }
             else if (matrice_drapeaux[x][y] === 1)
             {
@@ -334,6 +337,67 @@ function main()
     
     affiche_matrices();
 
+}
+
+function ia1(nb){
+    if(nb === 0) {
+        clic_case(Math.round(Math.random()*largeur), Math.round(Math.random()*hauteur), "gauche");
+        explorer();
+        nb ++;
+        let int8 = Array(largeur).fill([]).map((x) => x = Array(hauteur).fill(255));
+        ia11(int8);
+    }
+}
+
+function ia11(int8) {
+    let nb_cases = nombre_cases_non_minees_restantes();
+    let max = largeur*hauteur;
+    let k =0;
+
+    while (nb_cases !== 0 ||  (k<max)){
+        let min = [Number.MAX_SAFE_INTEGER,0,0];
+        for (let x = 0; x < largeur; x++) {
+            for (let y = 0; y < hauteur; y++) {
+                let element = "case_" + x + "_" + y;
+                let value = document.getElementById(element).textContent;
+                if (value !== "") {
+                    value = parseInt(value);
+                    distribuXtoVoisin(int8, x, y, value);
+                    if (int8[x][y] === 0 || matrice_cases_cliques[x][y] === 1) int8[x][y] = NaN;
+                }
+            }
+        }
+        min = choice(int8,min)
+        if(!clic_case(min[1], min[2], "gauche")) return;
+        nb_cases = nombre_cases_non_minees_restantes();
+
+        explorer();
+        k++;
+    }
+}
+function distribuXtoVoisin(tableau,x,y,value){
+    for (let i = -1; i <= 1; i++) {
+        for (let j = -1; j <= 1; j++) {
+            if (x + i >= 0 && x + i < largeur && y + j >= 0 && y + j < hauteur) {
+                if(matrice_cases_cliques[x+i][y+j] !== 1) tableau[x+i][y+j] %= 255;
+                tableau[x+i][y+j] += value;
+            }
+        }
+    }
+    return tableau;
+}
+
+function choice(int8,min){
+    for (let x = 0; x < largeur; x++) {
+        for (let y = 0; y < hauteur; y++) {
+            if (int8[x][y] < min[0]) {
+                min[0] = int8[x][y];
+                min[1] = x;
+                min[2] = y;
+            }
+        }
+    }
+    return min;
 }
 
 window.onload = main;

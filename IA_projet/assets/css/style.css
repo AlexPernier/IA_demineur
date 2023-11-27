@@ -69,7 +69,9 @@ body {
     text-align: center;
     cursor: pointer;
 }
-
+.perdue{
+    background-color: red;
+}
 .grille {
     margin: 0 auto;
 }
