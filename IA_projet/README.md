@@ -10,5 +10,5 @@ Ce projet a été réalisé en équipe avec [Dorian DESCAMPS](https://github.com
 
 ## DémineurIA
 
-Il s'agit d'un projet dans la cadre du d'IA en master MIASHS.
+Il s'agit d'un projet dans la cadre du cours d'IA en master 1 MIASHS.
 La logique du jeu du démineur a été reprise et amélioré pour intégrer une IA capable de résoudre le problème.
