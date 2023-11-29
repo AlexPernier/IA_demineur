@@ -417,7 +417,7 @@ function compteNan(tableau)
                     {
                         if (x + i >= 0 && x + i < largeur && y + j >= 0 && y + j < hauteur)
                         {
-                            if(isNaN(tableau[x+i][y+j]))k++;
+                            if(isNaN(tableau[x+i][y+j]))k++; //k += isNaN(tableau[x + i][y + j]); better?
                         }
                     }
                 }
