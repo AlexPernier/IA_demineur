@@ -16,8 +16,8 @@ function choix_difficulte()
     if (difficulte === "expert")
     {
         nb_mines = 99;
-        largeur = 18;
-        hauteur = 18;
+        largeur = 20;
+        hauteur = 20;
     }
     else if (difficulte === "intermediaire")
     {
@@ -54,7 +54,7 @@ function creation_matrices(premiere_generation)
         {
             matrice_drapeaux[x] = [];
         }
-        
+
         for (let y = 0; y < hauteur; y++)
         {
             matrice_mines[x][y] = 0;
@@ -100,7 +100,6 @@ function compte_voisins()
                     if (x + i >= 0 && x + i < largeur && y + j >= 0 && y + j < hauteur)
                     {
                             matrice_nombre_voisins[x][y] += matrice_mines[x + i][y + j];
-
                     }
                 }
             }
@@ -259,7 +258,6 @@ function explorer()
             }
         }
     }
-
     if (case_decouverte === true)
     {
         explorer();
@@ -409,7 +407,7 @@ function compteNan(tableau)
     {
         for (let y = 0; y < hauteur; y++)
         {
-            if(tableau[x][y] !== 255 && tableau[x][y] !== NaN){
+            if(tableau[x][y] !== 255 && !isNaN(tableau[x][y])){
                 let k=0;
                 for (let i = -1; i <= 1; i++)
                 {
@@ -417,7 +415,7 @@ function compteNan(tableau)
                     {
                         if (x + i >= 0 && x + i < largeur && y + j >= 0 && y + j < hauteur)
                         {
-                            if(isNaN(tableau[x+i][y+j]))k++;
+                            k+=(isNaN(tableau[x+i][y+j]));
                         }
                     }
                 }
