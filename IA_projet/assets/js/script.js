@@ -54,7 +54,7 @@ function creation_matrices(premiere_generation)
         {
             matrice_drapeaux[x] = [];
         }
-
+        
         for (let y = 0; y < hauteur; y++)
         {
             matrice_mines[x][y] = 0;
@@ -258,6 +258,7 @@ function explorer()
             }
         }
     }
+
     if (case_decouverte === true)
     {
         explorer();
