@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <title>Démineur</title>
 
     <link rel="stylesheet" href="./assets/css/style.css">
 
     <script src="./assets/js/script.js"></script>
 </head>
+
 <body>
     <div class="statistiques">
         <span>Nombre de mines :</span>
@@ -22,9 +24,11 @@
         <span>Nombre de cases non minées restantes :</span>
         <span id="nombre_cases_non_minees_restantes"></span>
         <button class="bouton_ia" onclick="ia11()">Coup IA</button>
+        <button class="bouton_ia_bfs" onclick="iabfs()">Coup IA BFS</button>
     </div>
     <div class="verticalement_et_horizontalement_centre">
         <table class="grille" id="grille" onclick="explorer()" oncontextmenu="return false;"></table>
     </div>
 </body>
+
 </html>

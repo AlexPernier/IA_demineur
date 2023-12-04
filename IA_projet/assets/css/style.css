@@ -105,6 +105,19 @@ body {
     cursor: pointer;
 }
 
+.bouton_ia_bfs {
+    all: unset;
+    position: absolute;
+    top: min(9vw, 9vh);
+    left: 25vw;
+    width: 50vw;
+    height: 5vh;
+    background-color: var(--purple);
+    text-align: center;
+    border-radius: 2.5vh;
+    cursor: pointer;
+}
+
 .statistiques {
     position: absolute;
     left: min(1vw, 1vh);
