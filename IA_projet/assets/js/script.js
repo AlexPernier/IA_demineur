@@ -367,9 +367,7 @@ function distribuXtoVoisin(tableau) {
                     for (let j = -1; j <= 1; j++) {
                         if (x + i >= 0 && x + i < largeur && y + j >= 0 && y + j < hauteur) {//on répartit aux cases adjacentes
                             tableau[x + i][y + j] %= 255; //on lui donne une chance d'être explore
-                            console.log("tabbvoisin : " + tableau)
-                            if (tableau[x + i][y + j] != -1) tableau[x + i][y + j] += value;
-                            console.log("tabvoisin mine :" + tableau) //on ne veut pas que les potentielles mines soient selectionnées (je vais modifié ça aussi)
+                            if (tableau[x + i][y + j] != -1) tableau[x + i][y + j] += value; //on ne veut pas que les potentielles mines soient selectionnées (je vais modifié ça aussi)
                         }
                     }
                 }
