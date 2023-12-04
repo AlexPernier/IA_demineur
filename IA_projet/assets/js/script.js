@@ -140,11 +140,11 @@ function nombre_cases_non_minees_restantes() {
 }
 
 function partie_remportee() {
-    // window.location.href = "victoire.html";
+    window.location.href = "victoire.html";
 }
 
 function partie_perdue() {
-    //  window.location.href = "defaite.html";
+    window.location.href = "defaite.html";
 }
 
 function place_drapeau(x, y) {
