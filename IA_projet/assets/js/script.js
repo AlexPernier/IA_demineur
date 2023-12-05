@@ -6,12 +6,20 @@ let matrice_mines;
 let matrice_nombre_voisins;
 let matrice_cases_cliques;
 let matrice_drapeaux;
-
+let ia;
+let victoire;
+let defaite;
+let ratio;
+let affichageRatio
 /// CHOIX DIFFICULTE ///
 
 function choix_difficulte() {
     let difficulte = new URLSearchParams(window.location.search).get("difficulte");
-
+    victoire = 0;
+    defaite = 0;
+    ratio=0;
+    ia = true;
+    affichageRatio = document.getElementById("Ratio");
     if (difficulte === "expert") {
         nb_mines = 99;
         largeur = 16;
@@ -40,20 +48,11 @@ function creation_matrices(premiere_generation) {
     }
 
     for (let x = 0; x < largeur; x++) {
-        matrice_mines[x] = [];
-        matrice_nombre_voisins[x] = [];
-        matrice_cases_cliques[x] = [];
+        matrice_mines[x] = new Int8Array(hauteur);
+        matrice_nombre_voisins[x] = new Int8Array(hauteur);
+        matrice_cases_cliques[x] = new Int8Array(hauteur);
         if (premiere_generation) {
-            matrice_drapeaux[x] = [];
-        }
-
-        for (let y = 0; y < hauteur; y++) {
-            matrice_mines[x][y] = 0;
-            matrice_nombre_voisins[x][y] = 0;
-            matrice_cases_cliques[x][y] = 0;
-            if (premiere_generation) {
-                matrice_drapeaux[x][y] = 0;
-            }
+            matrice_drapeaux[x] = new Int8Array(hauteur);
         }
     }
 
@@ -110,10 +109,22 @@ function clic_case(x, y, type_clique) {
                 matrice_cases_cliques[x][y] = 1;
 
                 if (matrice_mines[x][y] === 1) {
-                    partie_perdue();
+                    defaite++;
+                    ratio=victoire/defaite*100;
+                    affichageRatio.innerHTML = victoire+"/"+defaite+"/"+ratio;
+                    if(ia===true)partie_perdue();
+                    nombre_cliques = 0;
+                    creation_matrices(true);
+                    return false;
                 }
                 else if (nombre_cases_non_minees_restantes() === 0) {
-                    partie_remportee();
+                    victoire++;
+                    ratio=victoire/defaite*100;
+                    affichageRatio.innerHTML = victoire+"/"+defaite+"/"+ratio;
+                    if(ia===true)partie_remportee();
+                    nombre_cliques = 0;
+                    creation_matrices(true);
+                    return false;
                 }
             }
         }
@@ -122,7 +133,7 @@ function clic_case(x, y, type_clique) {
         place_drapeau(x, y);
     }
 
-    affiche_matrices();
+    if(ia===true)affiche_matrices();
 }
 
 function nombre_cases_non_minees_restantes() {
@@ -278,7 +289,8 @@ function main() {
 
 /** IA fonctionnel BFS */
 
-function iabfs() {
+function iabfs(affichage) {
+    ia = affichage;
     let max = largeur * hauteur; //Le nombre de case max pour les stats
     let k = 0; //nb coups
     let xdfs = 0;
@@ -325,24 +337,28 @@ function RemplirTabVoisin(tabvoisin, tabvoisinclique) {
 
 
 /** IA fonctionnel à benchmark */
-function ia11() {
+function ia11(affichage) {
+    ia = affichage; //pour éviter d'afficher
     let max = largeur * hauteur; //Le nombre de case max pour les stats
     let k = 0; //nb coups
     let int8 = Array(largeur).fill([]).map((x) => x = Array(hauteur).fill(255)); //création d'une matrice contenant des valeurs inatteignables
+    let terrain = [];
+    for (let x = 0; x < largeur; x++) {
+        terrain[x] = new Int8Array(hauteur);
+    }
     while (nombre_cases_non_minees_restantes() !== 0 && (k < max)) {  //on s'arrête quand il n'y a plus de cases non minées (normalement, on a déja perdu ou gagné avant de sortir de la boucle)
         let min = [Number.MAX_SAFE_INTEGER, 0, 0]; //on met la plus grande valeur possible pour être sur (mais bon, c'est une valeur arbitraire)
         for (let x = 0; x < largeur; x++) { //on parcourt chaque case de la grille
             for (let y = 0; y < hauteur; y++) {
-                let element = "case_" + x + "_" + y;  //je dois modifier ça pour que l'algo tourne sans l'interface graphique
-                let value = document.getElementById(element).textContent;
-                if (value !== "") { //si elle n'est pas exploré (value == "") donc on n'en veut pas
+                terrain[x][y] = matrice_cases_cliques[x][y]*matrice_nombre_voisins[x][y];
+                if (terrain[x][y] !== 0) { //si elle n'est pas exploré (value == "") donc on n'en veut pas
                     if (int8[x][y] === 0 || matrice_cases_cliques[x][y] === 1) int8[x][y] = NaN; //on met NaN (Not a Number) pour ne pas cliquer dessus
                 }
             }
         }
-        distribuXtoVoisin(int8); //on répartit les valeurs
+        distribuXtoVoisin(int8,terrain); //on répartit les valeurs
         compteNan(int8); //on discrimine les potentielles mines
-        distribuXtoVoisin(int8); //on recalcule en prenant en compte les potentielles mines
+        distribuXtoVoisin(int8,terrain); //on recalcule en prenant en compte les potentielles mines
         min = choice(int8, min); //on choisit le cas la plus safe
         clic_case(min[1], min[2], "gauche") //on clique dessus
         console.log(k + ":" + max + ":" + nombre_cases_non_minees_restantes());
@@ -356,13 +372,11 @@ function ia11() {
  * à des cases non explorées (et donc potentiellement à une mine).
  * Plus cette somme est élevé, moins on a de chance de cliquer dessus.
  * */
-function distribuXtoVoisin(tableau) {
+function distribuXtoVoisin(tableau,terrain) {
     for (let x = 0; x < largeur; x++) {//on parcourt
         for (let y = 0; y < hauteur; y++) {
-            let element = "case_" + x + "_" + y; //je dois modifier ça pour que l'algo tourne sans l'interface graphique
-            let value = document.getElementById(element).textContent;
-            if (value !== "" || value != 0) { //répartir une case non explorée, c'est inutile et les cases valant 0 ne nous donne aucune info sur des mines
-                value = parseInt(value);
+            let value = terrain[x][y]
+            if (value !== 0) { //répartir une case non explorée, c'est inutile et les cases valant 0 ne nous donne aucune info sur des mines
                 for (let i = -1; i <= 1; i++) {
                     for (let j = -1; j <= 1; j++) {
                         if (x + i >= 0 && x + i < largeur && y + j >= 0 && y + j < hauteur) {//on répartit aux cases adjacentes
