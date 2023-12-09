@@ -11,15 +11,18 @@ let victoire;
 let defaite;
 let ratio;
 let affichageRatio;
+let affichageTime;
+
 /// CHOIX DIFFICULTE ///
 
 function choix_difficulte() {
     let difficulte = new URLSearchParams(window.location.search).get("difficulte");
     victoire = 0;
     defaite = 0;
-    ratio=0;
+    ratio = 0;
     ia = true;
     affichageRatio = document.getElementById("Ratio");
+    affichageTime = document.getElementById("Time");
     if (difficulte === "expert") {
         nb_mines = 99;
         largeur = 16;
@@ -110,14 +113,14 @@ function clic_case(x, y, type_clique) {
 
                 if (matrice_mines[x][y] === 1) {
                     defaite++;
-                    ratio=victoire/defaite*100;
-                    if(ia===true)partie_perdue();
+                    ratio = victoire / defaite * 100;
+                    if (ia === true) partie_perdue();
                     return false;
                 }
                 else if (nombre_cases_non_minees_restantes() === 0) {
                     victoire++;
-                    ratio=victoire/defaite*100;
-                    if(ia===true)partie_remportee();
+                    ratio = victoire / defaite * 100;
+                    if (ia === true) partie_remportee();
                     return false;
                 }
             }
@@ -127,7 +130,7 @@ function clic_case(x, y, type_clique) {
         place_drapeau(x, y);
     }
 
-    if(ia===true)affiche_matrices();
+    if (ia === true) affiche_matrices();
 }
 
 function nombre_cases_non_minees_restantes() {
@@ -281,26 +284,37 @@ function main() {
 }
 
 
-function naiveIaLoop(i,affichage){
+function naiveIaLoop(i, affichage) {
     ia = affichage; //pour éviter d'afficher
+    var globalStartTime = performance.now();
     for (let j = 0; j < i; j++) {
         ia11();
         nombre_cliques = 0;
         creation_matrices(true);
-        affichageRatio.innerText = victoire+"/"+defaite+"/"+ratio;
-        console.log("compteur"+j);
+        affichageRatio.innerText = victoire + "/" + defaite + "/" + ratio;
+        console.log("compteur" + j);
     }
+    var globalEndTime = performance.now();
+    affichageTime.innerText = globalEndTime - globalStartTime;
+    console.log(`Page init took ${globalEndTime - globalStartTime} milliseconds`);
 }
 
-function bfsLoop(i,affichage) {
+function bfsLoop(i, affichage) {
     ia = affichage; //pour éviter d'afficher
+    var globalStartTime = performance.now();
+    console.log(i)
     for (let j = 0; j < i; j++) {
         iabfs();
         nombre_cliques = 0;
         creation_matrices(true);
-        affichageRatio.innerText = victoire+"/"+defaite+"/"+ratio;
-        console.log("compteur"+j);
+        affichageRatio.innerText = victoire + "/" + defaite + "/" + ratio;
+        // console.log("compteur" + j);
     }
+    var globalEndTime = performance.now();
+    affichageTime.innerText = globalEndTime - globalStartTime;
+    console.log(`Page init took ${globalEndTime - globalStartTime} milliseconds`);
 }
+
+
 
 window.onload = main;
