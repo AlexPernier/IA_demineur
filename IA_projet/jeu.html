@@ -14,6 +14,7 @@
     <script src="./assets/js/naiveIA.js"></script>
     <script src="./assets/js/beccera.js"></script>
     <script src="./assets/js/bfsIA.js"></script>
+    <script src="./assets/js/bestfirstia.js"></script>
 
 </head>
 
@@ -37,10 +38,12 @@
         <button class="bouton_ia" onclick="naiveIaLoop(1000,false)">IA naïve x1000</button>
         <button class="bouton_ia" onclick="bfsLoop(1000,false)">IA BFS x1000</button>
         <button class="bouton_ia" onclick="becceraLoop(1000,false)">IA Beccera x1000</button>
+        <button class="bouton_ia" onclick="bestfirstLoop(1000,false)">IA Best First Schearch x1000</button>
 
         <button class="bouton_ia" onclick="naiveIaLoop(1,true)">IA naïve affichage</button>
         <button class="bouton_ia" onclick="bfsLoop(1,true)">IA BFS affichage</button>
         <button class="bouton_ia" onclick="becceraLoop(1,true)">IA Beccera affichage</button>
+        <button class="bouton_ia" onclick="bestfirstLoop(1,true)">IA Best First Schearch affichage</button>
     </div>
     <div class="verticalement_et_horizontalement_centre">
         <table class="grille" id="grille" onclick="explorer()" oncontextmenu="return false;"></table>

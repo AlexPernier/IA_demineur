@@ -52,10 +52,10 @@ function creation_matrices(premiere_generation) {
     for (let x = 0; x < largeur; x++) {
         if (premiere_generation) {
             matrice_mines[x] = new Int8Array(hauteur);
-            matrice_nombre_voisins[x] = new Int8Array(hauteur) ;
+            matrice_nombre_voisins[x] = new Int8Array(hauteur);
             matrice_cases_cliques[x] = new Int8Array(hauteur);
             matrice_drapeaux[x] = new Int8Array(hauteur);
-        }else {
+        } else {
             matrice_mines[x].fill(0);
             matrice_nombre_voisins[x].fill(0);
             matrice_cases_cliques[x].fill(0);
@@ -115,13 +115,13 @@ function clic_case(x, y, type_clique) {
                 if (matrice_mines[x][y] === 1) {
                     defaite++;
                     //console.log("defaite");
-                    if(ia===true)partie_perdue();
+                    if (ia === true) partie_perdue();
                     return -1;
                 }
                 else if (nombre_cases_non_minees_restantes() === 0) {
                     victoire++;
                     console.log("victoire");
-                    if(ia===true)partie_remportee();
+                    if (ia === true) partie_remportee();
                     return -1;
                 }
             }
@@ -131,7 +131,7 @@ function clic_case(x, y, type_clique) {
         place_drapeau(x, y);
     }
 
-    if(ia===true)affiche_matrices();
+    if (ia === true) affiche_matrices();
 }
 
 function nombre_cases_non_minees_restantes() {
@@ -149,11 +149,11 @@ function nombre_cases_non_minees_restantes() {
 }
 
 function partie_remportee() {
-    window.location.href = "victoire.html";
+    //window.location.href = "victoire.html";
 }
 
 function partie_perdue() {
-    window.location.href = "defaite.html";
+    //window.location.href = "defaite.html";
 }
 
 function place_drapeau(x, y) {
@@ -230,8 +230,8 @@ function affiche_matrices() {
             else {
                 case_.setAttribute("class", "case");
             }
-            if(matrice_mines[x][y]===1){
-                case_.setAttribute("class","perdue");
+            if (matrice_mines[x][y] === 1) {
+                case_.setAttribute("class", "perdue");
             }
             ligne.appendChild(case_);
         }
@@ -263,11 +263,11 @@ function main() {
 }
 
 
-function naiveIaLoop(i,affichage){
+function naiveIaLoop(i, affichage) {
     ia = affichage; //pour éviter d'afficher
     let terrain = [];
     let liste = [];
-    let k=-1;
+    let k = -1;
     for (let x = 0; x < largeur; x++) {
         terrain[x] = new Int8Array(hauteur);
         liste[x] = new Int8Array(hauteur);
@@ -281,15 +281,15 @@ function naiveIaLoop(i,affichage){
             creation_matrices(false);
         }
     }
-    ratio = victoire/defaite*100;
-    affichageRatio.innerText = victoire+"/"+defaite+"/"+nulle+"/"+ratio;
+    ratio = victoire / defaite * 100;
+    affichageRatio.innerText = victoire + "/" + defaite + "/" + nulle + "/" + ratio;
 }
 
-function becceraLoop(i,affichage){
+function becceraLoop(i, affichage) {
     ia = affichage; //pour éviter d'afficher
     var globalStartTime = performance.now();
     let terrain = [];
-    let k=-1;
+    let k = -1;
     for (let x = 0; x < largeur; x++) {
         terrain[x] = new Int8Array(hauteur);
     }
@@ -305,8 +305,8 @@ function becceraLoop(i,affichage){
     var globalEndTime = performance.now();
     affichageTime.innerText = globalEndTime - globalStartTime;
     console.log(`Page init took ${globalEndTime - globalStartTime} milliseconds`);
-    ratio = victoire/defaite*100;
-    affichageRatio.innerText = victoire+"/"+defaite+"/"+nulle+"/"+ratio;
+    ratio = victoire / defaite * 100;
+    affichageRatio.innerText = victoire + "/" + defaite + "/" + nulle + "/" + ratio;
 }
 
 function bfsLoop(i, affichage) {
@@ -315,6 +315,23 @@ function bfsLoop(i, affichage) {
     console.log(i)
     for (let j = 0; j < i; j++) {
         iabfs();
+        nombre_cliques = 0;
+        creation_matrices(true);
+        affichageRatio.innerText = victoire + "/" + defaite + "/" + ratio;
+        // console.log("compteur" + j);
+    }
+    var globalEndTime = performance.now();
+    affichageTime.innerText = globalEndTime - globalStartTime;
+    console.log(`Page init took ${globalEndTime - globalStartTime} milliseconds`);
+}
+
+
+function bestfirstLoop(i, affichage) {
+    ia = affichage; //pour éviter d'afficher
+    var globalStartTime = performance.now();
+    console.log(i)
+    for (let j = 0; j < i; j++) {
+        iabestfirst();
         nombre_cliques = 0;
         creation_matrices(true);
         affichageRatio.innerText = victoire + "/" + defaite + "/" + ratio;
