@@ -9,15 +9,14 @@ let matrice_drapeaux;
 let ia;
 let victoire;
 let defaite;
+let nulle;
 let ratio;
 let affichageRatio;
 /// CHOIX DIFFICULTE ///
 
 function choix_difficulte() {
     let difficulte = new URLSearchParams(window.location.search).get("difficulte");
-    victoire = 0;
-    defaite = 0;
-    ratio=0;
+    victoire = defaite = ratio = nulle = 0;
     ia = true;
     affichageRatio = document.getElementById("Ratio");
     if (difficulte === "expert") {
@@ -27,8 +26,8 @@ function choix_difficulte() {
     }
     else if (difficulte === "intermediaire") {
         nb_mines = 40;
-        largeur = 16;
-        hauteur = 16;
+        largeur = 15;
+        hauteur = 13;
     }
     else {
         nb_mines = 10;
@@ -40,19 +39,23 @@ function choix_difficulte() {
 /// INITIALISATION ///
 
 function creation_matrices(premiere_generation) {
-    matrice_mines = [];
-    matrice_nombre_voisins = [];
-    matrice_cases_cliques = [];
     if (premiere_generation) {
+        matrice_mines = [];
+        matrice_nombre_voisins = [];
+        matrice_cases_cliques = [];
         matrice_drapeaux = [];
     }
 
     for (let x = 0; x < largeur; x++) {
-        matrice_mines[x] = new Int8Array(hauteur);
-        matrice_nombre_voisins[x] = new Int8Array(hauteur);
-        matrice_cases_cliques[x] = new Int8Array(hauteur);
         if (premiere_generation) {
+            matrice_mines[x] = new Int8Array(hauteur);
+            matrice_nombre_voisins[x] = new Int8Array(hauteur) ;
+            matrice_cases_cliques[x] = new Int8Array(hauteur);
             matrice_drapeaux[x] = new Int8Array(hauteur);
+        }else {
+            matrice_mines[x].fill(0);
+            matrice_nombre_voisins[x].fill(0);
+            matrice_cases_cliques[x].fill(0);
         }
     }
 
@@ -93,32 +96,30 @@ function compte_voisins() {
 function clic_case(x, y, type_clique) {
     if (type_clique === "gauche") {
         if (matrice_drapeaux[x][y] === 1) {
-            alert("Vous ne pouvez pas cliquer sur une case avec un drapeau !")
+            return -1;
         }
         else {
             nombre_cliques++;
 
             if (nombre_cliques === 1) {
-                do {
+                while (matrice_mines[x][y] === 1) {
                     creation_matrices(false);
                 }
-                while (matrice_mines[x][y] === 1);
             }
 
             if (matrice_cases_cliques[x][y] === 0) {
                 matrice_cases_cliques[x][y] = 1;
-
                 if (matrice_mines[x][y] === 1) {
                     defaite++;
-                    ratio=victoire/defaite*100;
+                    //console.log("defaite");
                     if(ia===true)partie_perdue();
-                    return false;
+                    return -1;
                 }
                 else if (nombre_cases_non_minees_restantes() === 0) {
                     victoire++;
-                    ratio=victoire/defaite*100;
+                    console.log("victoire");
                     if(ia===true)partie_remportee();
-                    return false;
+                    return -1;
                 }
             }
         }
@@ -153,26 +154,12 @@ function partie_perdue() {
 }
 
 function place_drapeau(x, y) {
-
-    if (matrice_drapeaux[x][y] === 1) {
-        matrice_drapeaux[x][y] = 0;
-    }
-    else if (nombre_drapeaux_places() < nb_mines) {
-        if (matrice_cases_cliques[x][y] === 0) {
-            matrice_drapeaux[x][y] = 1;
-        }
-        else {
-            alert("Vous ne pouvez pas placer de drapeau sur une case déjà cliquée !");
-        }
-    }
-    else {
-        alert("Nombre de drapeaux maximum atteint !");
-    }
+    if (matrice_drapeaux[x][y] === 1) matrice_drapeaux[x][y] = 0;
+    if (matrice_cases_cliques[x][y] === 0) matrice_drapeaux[x][y] = 1;
 }
 
 function nombre_drapeaux_places() {
     let nombre_drapeaux = 0;
-
     for (let x = 0; x < largeur; x++) {
         for (let y = 0; y < hauteur; y++) {
             if (matrice_drapeaux[x][y] === 1) {
@@ -180,7 +167,6 @@ function nombre_drapeaux_places() {
             }
         }
     }
-
     return nombre_drapeaux;
 }
 
@@ -189,20 +175,14 @@ function nombre_drapeaux_places() {
 
 function explorer() {
     let case_decouverte = false;
-
     for (let x = 0; x < largeur; x++) {
         for (let y = 0; y < hauteur; y++) {
             if (matrice_cases_cliques[x][y] === 0) {
                 for (let i = -1; i <= 1; i++) {
                     for (let j = -1; j <= 1; j++) {
-                        if (
-                            case_decouverte === false
-                            && (i !== 0 || j !== 0)
-                            && x + i >= 0 && x + i < largeur && y + j >= 0 && y + j < hauteur
-                        ) {
+                        if (case_decouverte === false && (i !== 0 || j !== 0) && x + i >= 0 && x + i < largeur && y + j >= 0 && y + j < hauteur) {
                             if (matrice_cases_cliques[x + i][y + j] === 1 && matrice_nombre_voisins[x + i][y + j] === 0) {
                                 case_decouverte = true;
-
                                 clic_case(x, y, "gauche");
                             }
                         }
@@ -211,7 +191,6 @@ function explorer() {
             }
         }
     }
-
     if (case_decouverte === true) {
         explorer();
     }
@@ -247,10 +226,10 @@ function affiche_matrices() {
             }
             else {
                 case_.setAttribute("class", "case");
-            } if (matrice_mines[x][y] === 1) {
-                case_.setAttribute("class", "perdue")
             }
-
+            if(matrice_mines[x][y]===1){
+                case_.setAttribute("class","perdue");
+            }
             ligne.appendChild(case_);
         }
 
@@ -283,13 +262,44 @@ function main() {
 
 function naiveIaLoop(i,affichage){
     ia = affichage; //pour éviter d'afficher
-    for (let j = 0; j < i; j++) {
-        ia11();
-        nombre_cliques = 0;
-        creation_matrices(true);
-        affichageRatio.innerText = victoire+"/"+defaite+"/"+ratio;
-        console.log("compteur"+j);
+    let terrain = [];
+    let liste = [];
+    let k=-1;
+    for (let x = 0; x < largeur; x++) {
+        terrain[x] = new Int8Array(hauteur);
+        liste[x] = new Int8Array(hauteur);
     }
+    for (let j = 0; j < i;) {
+        if (k === -1) {
+            k = 0;
+            k = ia11(terrain, liste);
+            j++;
+            nombre_cliques = 0;
+            creation_matrices(false);
+        }
+    }
+    ratio = victoire/defaite*100;
+    affichageRatio.innerText = victoire+"/"+defaite+"/"+nulle+"/"+ratio;
+}
+
+function becceraLoop(i,affichage){
+    ia = affichage; //pour éviter d'afficher
+    let terrain = [];
+    let k=-1;
+    for (let x = 0; x < largeur; x++) {
+        terrain[x] = new Int8Array(hauteur);
+    }
+    for (let j = 0; j < i;) {
+        if (k === -1) {
+            k = 0;
+            k = doubleSetSinglePoint(terrain);
+            j++;
+            nombre_cliques = 0;
+            creation_matrices(false);
+        }
+    }
+    ratio = victoire/defaite*100;
+    affichageRatio.innerText = victoire+"/"+defaite+"/"+nulle+"/"+ratio;
 }
 
 function bfsLoop(i,affichage) {
@@ -297,10 +307,11 @@ function bfsLoop(i,affichage) {
     for (let j = 0; j < i; j++) {
         iabfs();
         nombre_cliques = 0;
-        creation_matrices(true);
-        affichageRatio.innerText = victoire+"/"+defaite+"/"+ratio;
-        console.log("compteur"+j);
+        creation_matrices(false);
     }
+    ratio = victoire/defaite*100;
+    affichageRatio.innerText = victoire+"/"+defaite+"/"+nulle+"/"+ratio;
 }
+
 
 window.onload = main;

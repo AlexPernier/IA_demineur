@@ -12,7 +12,9 @@
 
     <script src="./assets/js/script.js"></script>
     <script src="./assets/js/naiveIA.js"></script>
+    <script src="./assets/js/beccera.js"></script>
     <script src="./assets/js/bfsIA.js"></script>
+
 </head>
 
 <body>
@@ -29,10 +31,13 @@
         <span>Nombre de cases non minées restantes :</span>
         <span id="nombre_cases_non_minees_restantes"></span>
         <br>
-        <button class="bouton_ia" onclick="naiveIaLoop(1000,false)">Coup IA naïve x1000</button>
-        <button class="bouton_ia" onclick="bfsLoop(1000,false)">Coup IA BFS x1000</button>
-        <button class="bouton_ia" onclick="naiveIaLoop(1,true)">Coup IA naïve affichage</button>
-        <button class="bouton_ia" onclick="bfsLoop(true)">Coup IA BFS affichage</button>
+        <button class="bouton_ia" onclick="naiveIaLoop(1000,false)">IA naïve x1000</button>
+        <button class="bouton_ia" onclick="bfsLoop(1000,false)">IA BFS x1000</button>
+        <button class="bouton_ia" onclick="becceraLoop(1000,false)">IA Beccera x1000</button>
+
+        <button class="bouton_ia" onclick="naiveIaLoop(1,true)">IA naïve affichage</button>
+        <button class="bouton_ia" onclick="bfsLoop(1,true)">IA BFS affichage</button>
+        <button class="bouton_ia" onclick="becceraLoop(1,true)">IA Beccera affichage</button>
     </div>
     <div class="verticalement_et_horizontalement_centre">
         <table class="grille" id="grille" onclick="explorer()" oncontextmenu="return false;"></table>

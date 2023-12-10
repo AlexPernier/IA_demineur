@@ -11,7 +11,7 @@ function iabfs() {
     let tabvoisinclique = [];
     while (nombre_cases_non_minees_restantes() !== 0 && (k < max)) {  //on s'arrête quand il n'y a plus de cases non minées (normalement, on a déja perdu ou gagné avant de sortir de la boucle)
 
-        if(clic_case(tabvoisin[0][0], tabvoisin[0][1], "gauche")===false)return; // clique sur le 1er element du tableau des voisins
+        if(clic_case(tabvoisin[0][0], tabvoisin[0][1], "gauche")===-1)return; // clique sur le 1er element du tableau des voisins
         tabvoisinclique.push([tabvoisin[0][0], tabvoisin[0][1]]);
 
         tabvoisin = RemplirTabVoisin(tabvoisin, tabvoisinclique) //rajoute les cases voisines a la fin du tableau
