@@ -12,6 +12,8 @@ let defaite;
 let nulle;
 let ratio;
 let affichageRatio;
+let affichageTime;
+
 /// CHOIX DIFFICULTE ///
 
 function choix_difficulte() {
@@ -19,6 +21,7 @@ function choix_difficulte() {
     victoire = defaite = ratio = nulle = 0;
     ia = true;
     affichageRatio = document.getElementById("Ratio");
+    affichageTime = document.getElementById("Time");
     if (difficulte === "expert") {
         nb_mines = 99;
         largeur = 16;
@@ -284,6 +287,7 @@ function naiveIaLoop(i,affichage){
 
 function becceraLoop(i,affichage){
     ia = affichage; //pour éviter d'afficher
+    var globalStartTime = performance.now();
     let terrain = [];
     let k=-1;
     for (let x = 0; x < largeur; x++) {
@@ -298,20 +302,29 @@ function becceraLoop(i,affichage){
             creation_matrices(false);
         }
     }
+    var globalEndTime = performance.now();
+    affichageTime.innerText = globalEndTime - globalStartTime;
+    console.log(`Page init took ${globalEndTime - globalStartTime} milliseconds`);
     ratio = victoire/defaite*100;
     affichageRatio.innerText = victoire+"/"+defaite+"/"+nulle+"/"+ratio;
 }
 
-function bfsLoop(i,affichage) {
+function bfsLoop(i, affichage) {
     ia = affichage; //pour éviter d'afficher
+    var globalStartTime = performance.now();
+    console.log(i)
     for (let j = 0; j < i; j++) {
         iabfs();
         nombre_cliques = 0;
-        creation_matrices(false);
+        creation_matrices(true);
+        affichageRatio.innerText = victoire + "/" + defaite + "/" + ratio;
+        // console.log("compteur" + j);
     }
-    ratio = victoire/defaite*100;
-    affichageRatio.innerText = victoire+"/"+defaite+"/"+nulle+"/"+ratio;
+    var globalEndTime = performance.now();
+    affichageTime.innerText = globalEndTime - globalStartTime;
+    console.log(`Page init took ${globalEndTime - globalStartTime} milliseconds`);
 }
+
 
 
 window.onload = main;
