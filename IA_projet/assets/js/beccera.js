@@ -42,24 +42,24 @@ function selectRandomSquare() {
     if (matrice_drapeaux[largeur-1][hauteur-1] !== 1 && matrice_cases_cliques[largeur-1][hauteur-1] !== 1)
         return Array(largeur - 1, hauteur - 1);
 
-    for (k = 0; k < largeur; k++) {
+    for (let k = 0; k < largeur; k++) {
         r = Math.floor(Math.random() * largeur);
         if (matrice_drapeaux[r][0] !== 1 && matrice_cases_cliques[r][0] !== 1)
             return Array(r, 0);
     }
-    for (let k=0;k<largeur;k++) {
+    for ( k=0;k<largeur;k++) {
         r = Math.floor(Math.random() * largeur);
         if (matrice_drapeaux[r][hauteur - 1] !== 1 && matrice_cases_cliques[r][hauteur - 1] !== 1)
             return Array(r, hauteur - 1);
     }
 
-    for (let k=0;k<hauteur;k++) {
+    for ( k=0;k<hauteur;k++) {
         r = Math.floor(Math.random() * largeur);
         if (matrice_drapeaux[0][r] !== 1 && matrice_cases_cliques[0][r] !== 1)
             return Array(0, r);
     }
 
-    for (let k=0;k<hauteur;k++) {
+    for ( k=0;k<hauteur;k++) {
         r = Math.floor(Math.random() * largeur);
         if (matrice_drapeaux[largeur - 1][r] !== 1 && matrice_cases_cliques[largeur - 1][r] !== 1)
             return Array(largeur - 1, r);

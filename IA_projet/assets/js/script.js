@@ -122,9 +122,7 @@ function clic_case(x, y, type_clique) {
                     return -1;
                 }
             }
-        }
-    }
-    else {
+    } else {
         place_drapeau(x, y);
         if(matrice_mines[x][y] === matrice_drapeaux[x][y]){
             tagMine++;
@@ -134,7 +132,6 @@ function clic_case(x, y, type_clique) {
             }
         }
     }
-
     if(ia===true)affiche_matrices();
 }
 
