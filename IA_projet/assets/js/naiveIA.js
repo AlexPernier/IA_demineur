@@ -4,6 +4,7 @@ function ia11(terrain,liste) {
     let max = largeur * hauteur; //Le nombre de case max pour les stats
     let k = 0; //nb coups
     let int8 = Array(largeur).fill([]).map((x) => x = Array(hauteur).fill(128)); //création d'une matrice contenant des valeurs inatteignables
+    let random;
     for (let x = 0; x < largeur; x++) {
         liste[x].fill(0);
     }
@@ -14,6 +15,11 @@ function ia11(terrain,liste) {
         deban(terrain,liste);
         distribuXtoVoisin(int8,terrain,liste);
         choice(int8, min,liste); //on choisit le cas la plus safe
+        if(matrice_cases_cliques[min[1]][min[2]] === 1){
+            random = selectRandomSquare();
+            min[1] = random[0];
+            min[2] = random[1];
+        }
         if(clic_case(min[1], min[2], "gauche") === -1)return -1; //on clique dessus
         explorer(); //s'il y a des cases avec comme valeur 0.
         k++;

@@ -28,10 +28,11 @@ function isAMN(q,terrain) {
             }
         }
     }
-    return value === k;
+    return value >= k;
 }
 
 function selectRandomSquare() {
+    let r;
     if (matrice_drapeaux[0][hauteur-1] !== 1 && matrice_cases_cliques[0][hauteur-1] !== 1)
         return Array(0,hauteur-1);
 
@@ -41,22 +42,28 @@ function selectRandomSquare() {
     if (matrice_drapeaux[largeur-1][hauteur-1] !== 1 && matrice_cases_cliques[largeur-1][hauteur-1] !== 1)
         return Array(largeur - 1, hauteur - 1);
 
-    for (k = 0; k < largeur; k++)
-        if (matrice_drapeaux[k][0] !== 1 && matrice_cases_cliques[k][0] !== 1)
-            return Array(k, 0);
+    for (k = 0; k < largeur; k++) {
+        r = Math.floor(Math.random() * largeur);
+        if (matrice_drapeaux[r][0] !== 1 && matrice_cases_cliques[r][0] !== 1)
+            return Array(r, 0);
+    }
+    for (let k=0;k<largeur;k++) {
+        r = Math.floor(Math.random() * largeur);
+        if (matrice_drapeaux[r][hauteur - 1] !== 1 && matrice_cases_cliques[r][hauteur - 1] !== 1)
+            return Array(r, hauteur - 1);
+    }
 
-    for (let k=0;k<largeur;k++)
-        if (matrice_drapeaux[k][hauteur - 1] !== 1 && matrice_cases_cliques[k][hauteur - 1] !== 1)
-            return Array(k, hauteur - 1);
+    for (let k=0;k<hauteur;k++) {
+        r = Math.floor(Math.random() * largeur);
+        if (matrice_drapeaux[0][r] !== 1 && matrice_cases_cliques[0][r] !== 1)
+            return Array(0, r);
+    }
 
-    for (let k=0;k<hauteur;k++)
-        if (matrice_drapeaux[0][k] !== 1 && matrice_cases_cliques[0][k] !== 1)
-            return Array(0, k);
-
-    for (let k=0;k<hauteur;k++)
-        if (matrice_drapeaux[largeur-1][k] !== 1 && matrice_cases_cliques[largeur-1][0] !== 1)
-            return Array(largeur-1,k);
-
+    for (let k=0;k<hauteur;k++) {
+        r = Math.floor(Math.random() * largeur);
+        if (matrice_drapeaux[largeur - 1][r] !== 1 && matrice_cases_cliques[largeur - 1][r] !== 1)
+            return Array(largeur - 1, r);
+    }
 
     for (let i = 0; i < nb_mines; i++) {
         let x = Math.floor(Math.random() * largeur);
@@ -75,11 +82,14 @@ function doubleSetSinglePoint(terrain){
     let Q = [];
     let move;
     let unmark;
+    let max = hauteur*largeur;
+    let escape =0;
     S.push(opening);
     for (let x = 0; x < largeur; x++) {
         terrain[x].fill(-1);
     }
-    while(true){
+    while(escape<max){
+        escape++;
         if(S.length === 0){
             move = selectRandomSquare();
             S.push(move);
@@ -104,23 +114,27 @@ function doubleSetSinglePoint(terrain){
                 Q.push(move);
             }
         }
-        for (let q in Q) {
+        for(let q=0;q<Q.length;q++) {
             if(isAMN(Q[q],terrain) === true){
                 unmark = unmarked(Q[q],terrain);
                 if(unmark.length !== 0)
                     for (let unmarkKey in unmark)
-                        clic_case(unmark[unmarkKey][0],unmark[unmarkKey][1],"droite");
+                        if(matrice_drapeaux[unmark[unmarkKey][0]][unmark[unmarkKey][1]] === 0)
+                            clic_case(unmark[unmarkKey][0],unmark[unmarkKey][1],"droite");
                 Q = Q.filter(x => x !== Q[q]);
+                q--;
             }
         }
-        for(let q in Q){
+        for(let q=0;q<Q.length;q++){
             if(isAFN(Q[q],terrain) === true){
                 unmark = unmarked(Q[q],terrain);
                 if(unmark.length !== 0)
                     for (let unmarkKey in unmark)
                         S.push(unmark[unmarkKey]);
                 Q = Q.filter(x => x !== Q[q]);
+                q--;
             }
         }
     }
+    return -1;
 }
