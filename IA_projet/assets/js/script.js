@@ -158,8 +158,11 @@ function partie_perdue() {
 }
 
 function place_drapeau(x, y) {
-    if (matrice_drapeaux[x][y] === 1) matrice_drapeaux[x][y] = 0;
-    if (matrice_cases_cliques[x][y] === 0) matrice_drapeaux[x][y] = 1;
+    if (matrice_drapeaux[x][y] === 1) {
+        matrice_drapeaux[x][y] = 0;
+        tagMine--;
+    }
+    if (matrice_cases_cliques[x][y] === 0 && nombre_drapeaux_places()<nb_mines) matrice_drapeaux[x][y] = 1;
 }
 
 function nombre_drapeaux_places() {

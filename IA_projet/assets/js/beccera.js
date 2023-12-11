@@ -1,5 +1,5 @@
 function isAFN(move,terrain) {
-    return terrain[move[0]][move[1]] === 0;
+    return (terrain[move[0]][move[1]]-mark(move[0],move[1])) === 0;
 }
 
 function unmarked(move,terrain) {
@@ -16,6 +16,17 @@ function unmarked(move,terrain) {
     return list;
 }
 
+function mark(x,y){
+    let k=0;
+    for (let i = -1; i <= 1; i++) {
+        for (let j = -1; j <= 1; j++) {
+            if ((i !== 0 || j !== 0) && x + i >= 0 && x + i < largeur && y + j >= 0 && y + j < hauteur) {
+                if(matrice_drapeaux[x + i][y + j]===1 )k++;
+            }
+        }
+    }
+    return k;
+}
 function isAMN(q,terrain) {
     let x = q[0];
     let y = q[1];
@@ -28,7 +39,7 @@ function isAMN(q,terrain) {
             }
         }
     }
-    return value >= k;
+    return value === k;
 }
 
 function selectRandomSquare() {
@@ -95,7 +106,7 @@ function doubleSetSinglePoint(terrain){
             S.push(move);
         }
         while(S.length !== 0){
-            move = S.shift();
+            move = S.pop();
             let x = move[0];
             let y = move[1];
             while (matrice_cases_cliques[x][y] === 1 && S.length!==0){
