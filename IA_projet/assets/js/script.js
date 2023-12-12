@@ -291,7 +291,7 @@ function naiveIaLoop(i,affichage){
     var globalEndTime = performance.now();
     affichageTime.innerText = globalEndTime - globalStartTime;
     console.log(`Page init took ${globalEndTime - globalStartTime} milliseconds`);
-    ratio = victoire/defaite*100;
+    ratio = victoire/(victoire+defaite)*100;
     affichageRatio.innerText = victoire+"/"+defaite+"/"+ ratio;
 }
 
@@ -315,7 +315,7 @@ function becceraLoop(i,affichage){
     var globalEndTime = performance.now();
     affichageTime.innerText = globalEndTime - globalStartTime;
     console.log(`Page init took ${globalEndTime - globalStartTime} milliseconds`);
-    ratio = victoire / defaite * 100;
+    ratio = victoire / (victoire+defaite) * 100;
     affichageRatio.innerText = victoire + "/" + defaite + "/" +  ratio;
 }
 
