@@ -91,11 +91,11 @@ function doubleSetSinglePoint(terrain){
     let opening = Array(0,0);
     let S = [];
     let Q = [];
-    let k=0;
+    let max = hauteur*largeur;
+    let escape = 0;
+    let k =0;
     let move;
     let unmark;
-    let max = hauteur*largeur;
-    let escape =0;
     S.push(opening);
     for (let x = 0; x < largeur; x++) {
         terrain[x].fill(-1);
@@ -106,7 +106,6 @@ function doubleSetSinglePoint(terrain){
             move = selectRandomSquare();
             k++;
             S.push(move);
-            console.log(k);
         }
         while(S.length !== 0){
             move = S.pop();
@@ -117,7 +116,9 @@ function doubleSetSinglePoint(terrain){
                 x = move[0];
                 y = move[1];
             }
-            if(clic_case(x,y,"gauche") === -1)return -1;
+            if(clic_case(x,y,"gauche") === -1){
+                return [-1,k];
+            }
             terrain[x][y] = matrice_nombre_voisins[x][y]*matrice_cases_cliques[x][y];
             if(isAFN(move,terrain) === true){
                 unmark = unmarked(move,terrain);
@@ -150,5 +151,5 @@ function doubleSetSinglePoint(terrain){
             }
         }
     }
-    return -1;
+    return [-1,escape,k];
 }

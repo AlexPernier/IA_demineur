@@ -15,6 +15,7 @@ let tagMine;
 let affichageRatio;
 let affichageTime;
 let voir;
+let random = 0;
 /// CHOIX DIFFICULTE ///
 
 function choix_difficulte() {
@@ -300,6 +301,7 @@ function becceraLoop(i,affichage){
     var globalStartTime = performance.now();
     let terrain = [];
     let k=-1;
+    let result;
     for (let x = 0; x < largeur; x++) {
         terrain[x] = new Int8Array(hauteur);
     }
@@ -308,7 +310,9 @@ function becceraLoop(i,affichage){
             k = 0;
             nombre_cliques = 0;
             creation_matrices(false);
-            k = doubleSetSinglePoint(terrain);
+            result = doubleSetSinglePoint(terrain);
+            k = result[0];
+            random += result[1];
             j++;
         }
     }
@@ -316,7 +320,7 @@ function becceraLoop(i,affichage){
     affichageTime.innerText = globalEndTime - globalStartTime;
     console.log(`Page init took ${globalEndTime - globalStartTime} milliseconds`);
     ratio = victoire / (victoire+defaite) * 100;
-    affichageRatio.innerText = victoire + "/" + defaite + "/" +  ratio;
+    affichageRatio.innerText = victoire + "/" + defaite + "/" +  ratio + "/"+ random/(victoire+defaite) ;
 }
 
 function bfsLoop(i, affichage) {
