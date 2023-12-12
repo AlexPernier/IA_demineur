@@ -91,6 +91,7 @@ function doubleSetSinglePoint(terrain){
     let opening = Array(0,0);
     let S = [];
     let Q = [];
+    let k=0;
     let move;
     let unmark;
     let max = hauteur*largeur;
@@ -103,7 +104,9 @@ function doubleSetSinglePoint(terrain){
         escape++;
         if(S.length === 0){
             move = selectRandomSquare();
+            k++;
             S.push(move);
+            console.log(k);
         }
         while(S.length !== 0){
             move = S.pop();
