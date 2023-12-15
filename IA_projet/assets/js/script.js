@@ -281,6 +281,8 @@ function naiveIaLoop(i,affichage){
     for (let j = 0; j < i;) {
         if (k === -1) {
             k = 0;
+            k = ia11(terrain, liste);
+            j++;
             nombre_cliques = 0;
             creation_matrices(false);
             k = ia11(terrain, liste);
@@ -294,7 +296,7 @@ function naiveIaLoop(i,affichage){
     affichageRatio.innerText = victoire+"/"+defaite+"/"+ ratio;
 }
 
-function becerraLoop(i,affichage){
+function becceraLoop(i,affichage){
     ia = affichage; //pour éviter d'afficher
     var globalStartTime = performance.now();
     let terrain = [];
