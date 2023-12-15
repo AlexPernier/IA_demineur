@@ -114,12 +114,12 @@ function clic_case(x, y, type_clique) {
                 matrice_cases_cliques[x][y] = 1;
                 if (matrice_mines[x][y] === 1) {
                     defaite++;
-                    if(ia===true && voir===true)partie_perdue();
+                    if(ia===true && voir!==true)partie_perdue();
                     return -1;
                 }
                 else if (nombre_cases_non_minees_restantes() === 0) {
                     victoire++;
-                    if(ia===true && voir===true)partie_remportee();
+                    if(ia===true && voir!==true)partie_remportee();
                     return -1;
                 }
             }
