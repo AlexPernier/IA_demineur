@@ -296,7 +296,7 @@ function naiveIaLoop(i,affichage){
     affichageRatio.innerText = victoire+"/"+defaite+"/"+ ratio;
 }
 
-function becceraLoop(i,affichage){
+function becerraLoop(i,affichage){
     ia = affichage; //pour éviter d'afficher
     var globalStartTime = performance.now();
     let terrain = [];
